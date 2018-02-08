@@ -34,8 +34,16 @@ class Rename < Thor
   
   def mp3 artist
     RenameMp3.new.rename artist, options
-
-    puts "ASDF"
-    p artist
+    puts 'Complete'.colorize :red
+  end
+  desc "fix", "Fix all over-renamed .mp3s in directory"
+  long_desc <<-LONGDESC
+    Fix all .mp3s, .wmas, .m4as and .accs in directory
+  LONGDESC
+  method_option :header, aliases: "-h", type: :numeric, desc: "header substring length", default: 0
+  
+  def fix
+    RenameMp3.new.fix options
+    puts 'Complete'.colorize :blue
   end
 end
