@@ -7,6 +7,13 @@ class RenameMp3
       puts out_filename.colorize :yellow
       File.rename filename, out_filename
     end
+    Dir.glob "./*.m4a" do |file_path|
+      filename = File.basename file_path
+      cut_filename = filename.slice options[:header], filename.length
+      out_filename = artist + ' - ' + cut_filename
+      puts out_filename.colorize :yellow
+      File.rename filename, out_filename
+    end
   end
   def fix options
     Dir.glob "./*.mp3" do |file_path|
