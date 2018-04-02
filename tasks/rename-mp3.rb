@@ -28,17 +28,20 @@ class RenameMp3
   def mp3info_rename(options)
     @@FILE_PATTERNS.each do |pattern|
       Dir.glob pattern do |file_path|
+        old_filename = File.basename file_path
+        extension = File.extname old_filename
         Mp3Info.open file_path do |mp3|
-          old_filename = File.basename file_path
-          extension = File.extname old_filename
           artist = mp3.tag1.artist
           title = mp3.tag1.title
-          if title.match /[uac00-ud7a3]+/ and title.match /[A-Za-z]+/
+          if not title.nil? and title.match /[uac00-ud7a3]+/ and title.match /[A-Za-z]+/
             title = title.match(/[()]([A-Za-z ]+)[()]/).captures[0]
+            new_filename = artist + ' - ' + title + extension
+            puts new_filename.colorize :light_magenta
+            # new_filename.split('').each do |char|
+            #   puts char.ord.to_s.colorize :yellow
+            # end
+            File.rename old_filename, new_filename
           end
-          new_filename = artist + ' - ' + title + extension
-          puts new_filename.colorize :light_magenta
-          File.rename old_filename, new_filename
         end
       end
     end
